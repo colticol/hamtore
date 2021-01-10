@@ -2,7 +2,6 @@
 var key;
 var secret;
 var minimumVolume = Number(bybit_minimumVolume);
-var regex = new RegExp(/^{{.+}}$/);
 var remessage = new RegExp(/^(strategy|\[strategy\]|\[st\]|\[ST\])?([^ :]+).*:.+ (buy|sell|buyalert|sellalert) @ (-?\d+) .+ (-?\d+).*$/);
 
 var Status = {
@@ -34,7 +33,8 @@ function Hamster_(){
         var strSubject = myMessages[i][j].getSubject();
         var strMessage = myMessages[i][j].getPlainBody().slice(0,200);
         
-        var ret = interpretMessage_(strSubject);
+        // prefix を除去してから解釈する
+        var ret = interpretMessage_(/^(Alert: |アラート:)?(.+)$/.exec(strSubject)[2]);
         var strategy = ret[0];
         var position = ret[1];
         var leverage = ret[2];
@@ -101,7 +101,7 @@ function interpretMessage_(message){
     }else if(Number(position)){
       sendMessage_("invalid position code.");
       throw new Error('Exit');
-    }else if(regex.test(position)) {
+    }else if(/^{{.+}}$/.test(position)) {
       sendMessage_("position variable may not be expanded. please use pine script v4");
       throw new Error('Exit');
     }

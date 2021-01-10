@@ -1,9 +1,4 @@
 // webhook
-var key;
-var secret;
-var minimumVolume = Number(bybit_minimumVolume);
-var regex = new RegExp(/^{{.+}}$/);
-var remessage = new RegExp(/^(strategy|\[strategy\]|\[st\]|\[ST\])?([^ :]+).*:.+ (buy|sell|buyalert|sellalert) @ (-?\d+) .+ (-?\d+).*$/);
 var MAXTRYNUM = 720;
 
 function doPost(e){
